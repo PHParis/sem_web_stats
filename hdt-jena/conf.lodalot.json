@@ -1,0 +1,14 @@
+{
+    "hdtDirectory": "/data2/hamdif/doctorants/ph/wardrobe_java/lodalot/",
+    "jsonDirectory": "/data2/hamdif/doctorants/ph/wardrobe_java/lodalot/",
+    "datasetNamesFilePath_old": "/data2/hamdif/doctorants/ph/wardrobe_java/data/dataset_names_top",
+    "datasetNamesFilePath": "/data2/hamdif/doctorants/ph/wardrobe_java/lodalot/dataset_names",
+    "ontologiesPath": "/data2/hamdif/doctorants/ph/wardrobe_java/data2/ontologies.nt",
+    "visitedUrisPath": "/data2/hamdif/doctorants/ph/wardrobe_java/lodalot/visited_uris",
+    "datasetErrorsPath": "/data2/hamdif/doctorants/ph/wardrobe_java/lodalot/datasetErrors",
+    "datasetNamesLimit": 0,
+    "loadOntologies": true,
+    "forceRecomputation": false,
+    "forceHDTDownload": false,
+    "passPreviousDatasetInError": false
+}

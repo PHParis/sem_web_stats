@@ -1,0 +1,13 @@
+{
+    "hdtDirectory": "C:\\GoogleDrive\\dev\\python\\hydra-py-master3\\data\\hdt\\",
+    "jsonDirectory": "C:\\GoogleDrive\\dev\\python\\hydra-py-master3\\data\\files3\\",
+    "datasetNamesFilePath": "C:\\GoogleDrive\\dev\\python\\hydra-py-master3\\data\\dataset_names",
+    "ontologiesPath": "C:\\GoogleDrive\\dev\\python\\hydra-py-master3\\data\\ontologies.ttl",
+    "visitedUrisPath": "C:\\GoogleDrive\\dev\\python\\hydra-py-master3\\data\\visited_uris",
+    "datasetErrorsPath": "C:\\GoogleDrive\\dev\\python\\hydra-py-master3\\data\\datasetErrors",
+    "datasetNamesLimit": 10,
+    "loadOntologies": false,
+    "forceRecomputation": true,
+    "forceHDTDownload": false,
+    "passPreviousDatasetInError": true
+}
