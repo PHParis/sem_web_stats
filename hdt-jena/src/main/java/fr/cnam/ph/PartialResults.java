@@ -1,6 +1,7 @@
 package fr.cnam.ph;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -202,13 +203,75 @@ public class PartialResults {
 			System.out.println("you must provide a path to an HDT file!");
 			return;
 		}
+		String filePathString = args[0];
+		File f = new File(filePathString);
+		if(!f.exists()) {			
+			String datasetId = f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf("\\")+1).replace(".hdt", "");
+			Stats stats = new StatsStream();
+			String configurationFilePath = "C:\\google_drive\\dev\\java\\Stats_LOD_Wardrobe_HDT\\hdt-jena\\conf.debug.json";
+			stats.conf = Configuration.fromJson(configurationFilePath);
+			filePathString = stats.conf.hdtDirectory + datasetId + ".hdt";
+			f = new File(filePathString);
+			if(!f.exists()) {
+				stats.datasetIdToHdtFile(datasetId);
+			}
+		}
 		
 		// Test of an HDT file
 		// This one has a problem: f27f6c53760f6c7c760e3181f2cc4179an
 		PartialResults pr = new PartialResults();
 //		pr.executeAndGetResults("C:\\Users\\PH\\Downloads\\c8e0b8b6e1bde2aaa1819fd2d1daf2fb.hdt");
-		pr.executeAndGetResults(args[0]);
-		System.out.println(pr.total_triple_count);
+//		pr.executeAndGetResults(args[0]);
+//		System.out.println(pr.total_triple_count);
+		// "186b3796f5f033e79cbbb3ddb699ca43" "http://www.w3.org/2002/07/owl#complementOf"
+		// "c8e0b8b6e1bde2aaa1819fd2d1daf2fb" "http://www.w3.org/2002/07/owl#AnnotationProperty"
+
+		
+		HDT hdt = null;
+		try {
+			hdt = HDTManager.loadHDT(filePathString, null);
+
+		} catch (EOFException e) {
+			log.error("EOFException in mapIndexedHDT of executeAndGetResults (with file; " + filePathString + ")", e);
+		}
+		if (hdt == null) {
+			log.error("HDT file is null: " + filePathString);
+			return;
+		}
+		int numberOfAnnotationProperties = 0;
+		int numberOfTriples = 0;
+		int numberOfSubjects = 0;
+		Set<String> properties = new HashSet<>();
+		Set<String> subjects = new HashSet<>();
+		try {
+			IteratorTripleString it = hdt.search("", "http://www.w3.org/2002/07/owl#complementOf", "");
+//			IteratorTripleString it = hdt.search("", "", "http://www.w3.org/2002/07/owl#complementOf");
+			while (it.hasNext()) {
+				TripleString ts = it.next();
+				String s = ts.getSubject().toString();
+				String p = ts.getPredicate().toString();
+				numberOfAnnotationProperties++;	
+				System.out.println(s);
+				properties.add(s);
+			}
+			
+			for (String property : properties) {
+				it = hdt.search("", property, "");
+				while (it.hasNext()) {
+					TripleString ts = it.next();
+					String s = ts.getSubject().toString();
+					numberOfTriples++;	
+					subjects.add(s);
+				}
+			}
+		} finally {
+			hdt.close();
+		}
+		numberOfSubjects = subjects.size();
+		System.out.println("#AnnotationProperty:" + numberOfAnnotationProperties);
+		System.out.println("#Triples:" + numberOfTriples);
+		System.out.println("#Subjects:" + numberOfSubjects);
+		System.out.println("#properties:" + properties.size());
 	}
 
 }
