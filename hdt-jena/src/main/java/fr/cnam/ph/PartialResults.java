@@ -3,11 +3,16 @@ package fr.cnam.ph;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.jena.base.Sys;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.rdfhdt.hdt.exceptions.NotFoundException;
@@ -199,11 +204,25 @@ public class PartialResults {
 	}
 
 	public static void main(String[] args) throws IOException, NotFoundException {
+		// java -server -Xmx300g -Xms8g -Dfile.encoding=UTF-8 -Dlog4j.configurationFile=/data2/hamdif/doctorants/ph/wardrobe_java/log4j2.xml -cp "/data2/hamdif/doctorants/ph/wardrobe_java/hdt-java/lib/*" fr.cnam.ph.PartialResults fileName
+		// fr.cnam.ph.Stats /data2/hamdif/doctorants/ph/wardrobe_java/conf.json
+//		long tmp = 0xFFFFFFFFL;
 		if (args == null || args.length <= 0) {
 			System.out.println("you must provide a path to an HDT file!");
 			return;
 		}
 		String filePathString = args[0];
+		String[] patterns = args.length > 1 ? args[1].split(" ") : null;
+		if (patterns == null || patterns.length != 3) {
+			log.error("patterns is null. You must provide a pattern, e.g. \"? ? ?\" or \"? http://www.w3.org/2002/07/owl#complementOf ?\"");
+			return;
+		}
+		for (int i = 0; i < patterns.length; i++) {
+			if (patterns[i].equals("?")) {
+				patterns[i] = "";
+			}
+			patterns[i] = patterns[i].replaceAll("<", "").replaceAll(">", "");
+		}
 		File f = new File(filePathString);
 		if(!f.exists()) {			
 			String datasetId = f.getAbsolutePath().substring(f.getAbsolutePath().lastIndexOf("\\")+1).replace(".hdt", "");
@@ -219,59 +238,67 @@ public class PartialResults {
 		
 		// Test of an HDT file
 		// This one has a problem: f27f6c53760f6c7c760e3181f2cc4179an
-		PartialResults pr = new PartialResults();
+//		PartialResults pr = new PartialResults();
 //		pr.executeAndGetResults("C:\\Users\\PH\\Downloads\\c8e0b8b6e1bde2aaa1819fd2d1daf2fb.hdt");
 //		pr.executeAndGetResults(args[0]);
 //		System.out.println(pr.total_triple_count);
 		// "186b3796f5f033e79cbbb3ddb699ca43" "http://www.w3.org/2002/07/owl#complementOf"
 		// "c8e0b8b6e1bde2aaa1819fd2d1daf2fb" "http://www.w3.org/2002/07/owl#AnnotationProperty"
 
-		
-		HDT hdt = null;
-		try {
-			hdt = HDTManager.loadHDT(filePathString, null);
-
-		} catch (EOFException e) {
-			log.error("EOFException in mapIndexedHDT of executeAndGetResults (with file; " + filePathString + ")", e);
-		}
-		if (hdt == null) {
-			log.error("HDT file is null: " + filePathString);
-			return;
-		}
-		int numberOfAnnotationProperties = 0;
-		int numberOfTriples = 0;
-		int numberOfSubjects = 0;
-		Set<String> properties = new HashSet<>();
+		System.out.println("filePathString: " + filePathString);
+		System.out.println("pattern: (" + patterns[0] + " " + patterns[1] + " " + patterns[2] + ")");
+		try (HDT hdt = HDTManager.loadHDT(filePathString, null)){
+			System.out.println("hdt loaded");
+//			int id= hdt.getDictionary().getSubjects().locate("http://bag.kadaster.nl/def#Ongeldigmaking");
+//		int numberOfAnnotationProperties = 0;
+//		int numberOfTriples = 0;
+//		int numberOfSubjects = 0;
+//		Set<String> properties = new HashSet<>();
 		Set<String> subjects = new HashSet<>();
-		try {
-			IteratorTripleString it = hdt.search("", "http://www.w3.org/2002/07/owl#complementOf", "");
+		
+			IteratorTripleString it = hdt.search(patterns[0], patterns[1], patterns[2]);
 //			IteratorTripleString it = hdt.search("", "", "http://www.w3.org/2002/07/owl#complementOf");
+			int count = 0;
 			while (it.hasNext()) {
 				TripleString ts = it.next();
 				String s = ts.getSubject().toString();
 				String p = ts.getPredicate().toString();
-				numberOfAnnotationProperties++;	
-				System.out.println(s);
-				properties.add(s);
+				String o = ts.getObject().toString();
+//				numberOfAnnotationProperties++;	
+//				System.out.println(s + " " +  p + " " + o);
+//				properties.add(s);
+				count++;
+				subjects.add(s);
 			}
+//			System.out.println(count);
+			List<String> subjectSorted = subjects.stream().collect(Collectors.toList());
+			Collections.sort(subjectSorted, (o1, o2) -> o1.compareTo(o2));
+			for (String string : subjectSorted) {
+				System.out.println(string);
+			}
+			System.out.println(subjectSorted.size());
 			
-			for (String property : properties) {
-				it = hdt.search("", property, "");
-				while (it.hasNext()) {
-					TripleString ts = it.next();
-					String s = ts.getSubject().toString();
-					numberOfTriples++;	
-					subjects.add(s);
-				}
-			}
-		} finally {
-			hdt.close();
+//			for (String property : properties) {
+//				it = hdt.search("", property, "");
+//				while (it.hasNext()) {
+//					TripleString ts = it.next();
+//					String s = ts.getSubject().toString();
+//					numberOfTriples++;	
+//					subjects.add(s);
+//				}
+//			}
+		
+		} catch (EOFException e) {
+			log.error("EOFException in mapIndexedHDT of executeAndGetResults (with file; " + filePathString + ")", e);
+		} catch (Exception e) {
+			log.error(e.toString());
 		}
-		numberOfSubjects = subjects.size();
-		System.out.println("#AnnotationProperty:" + numberOfAnnotationProperties);
-		System.out.println("#Triples:" + numberOfTriples);
-		System.out.println("#Subjects:" + numberOfSubjects);
-		System.out.println("#properties:" + properties.size());
+		
+//		numberOfSubjects = subjects.size();
+//		System.out.println("#AnnotationProperty:" + numberOfAnnotationProperties);
+//		System.out.println("#Triples:" + numberOfTriples);
+//		System.out.println("#Subjects:" + numberOfSubjects);
+//		System.out.println("#properties:" + properties.size());
 	}
 
 }
