@@ -3,6 +3,7 @@ package fr.cnam.ph;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -247,7 +248,11 @@ public class PartialResults {
 
 		System.out.println("filePathString: " + filePathString);
 		System.out.println("pattern: (" + patterns[0] + " " + patterns[1] + " " + patterns[2] + ")");
+		List<TripleString> tripleList = new ArrayList<>();
+		long endLoadingTime, startLoopingTime, endLoopingTime;
+		long startLoadingTime = System.currentTimeMillis();
 		try (HDT hdt = HDTManager.loadHDT(filePathString, null)){
+			endLoadingTime = System.currentTimeMillis();
 			System.out.println("hdt loaded");
 //			int id= hdt.getDictionary().getSubjects().locate("http://bag.kadaster.nl/def#Ongeldigmaking");
 //		int numberOfAnnotationProperties = 0;
@@ -255,28 +260,33 @@ public class PartialResults {
 //		int numberOfSubjects = 0;
 //		Set<String> properties = new HashSet<>();
 		Set<String> subjects = new HashSet<>();
-		
+			startLoopingTime = System.currentTimeMillis();
 			IteratorTripleString it = hdt.search(patterns[0], patterns[1], patterns[2]);
 //			IteratorTripleString it = hdt.search("", "", "http://www.w3.org/2002/07/owl#complementOf");
 			int count = 0;
 			while (it.hasNext()) {
 				TripleString ts = it.next();
-				String s = ts.getSubject().toString();
-				String p = ts.getPredicate().toString();
-				String o = ts.getObject().toString();
-//				numberOfAnnotationProperties++;	
+				tripleList.add(ts);
+//				String s = ts.getSubject().toString();
+//				String p = ts.getPredicate().toString();
+//				String o = ts.getObject().toString();
+////				numberOfAnnotationProperties++;	
 //				System.out.println(s + " " +  p + " " + o);
-//				properties.add(s);
-				count++;
-				subjects.add(s);
+////				properties.add(s);
+//				count++;
+//				subjects.add(s);
 			}
+			endLoopingTime = System.currentTimeMillis();
+			System.out.println("loadingTime: " + (endLoadingTime - startLoadingTime));
+			System.out.println("loopTime: " + (endLoopingTime - startLoopingTime));
 //			System.out.println(count);
-			List<String> subjectSorted = subjects.stream().collect(Collectors.toList());
-			Collections.sort(subjectSorted, (o1, o2) -> o1.compareTo(o2));
-			for (String string : subjectSorted) {
-				System.out.println(string);
-			}
-			System.out.println(subjectSorted.size());
+//			List<String> subjectSorted = subjects.stream().collect(Collectors.toList());
+//			Collections.sort(subjectSorted, (o1, o2) -> o1.compareTo(o2));
+//			for (String string : subjectSorted) {
+//				System.out.println(string);
+//			}
+//			System.out.println(subjectSorted.size());
+//			System.out.println(subjectSorted.stream().collect(Collectors.toSet()).size());
 			
 //			for (String property : properties) {
 //				it = hdt.search("", property, "");

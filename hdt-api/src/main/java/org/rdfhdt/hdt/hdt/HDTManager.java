@@ -16,6 +16,7 @@ public abstract class HDTManager {
 	
 	private static HDTManager instance;
 	
+	@SuppressWarnings("deprecation")
 	private static HDTManager getInstance() {
 		if(instance==null) {
 			try {

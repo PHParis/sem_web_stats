@@ -289,9 +289,13 @@ public class PFCDictionarySection implements DictionarySectionPrivate {
 			pos+=len+1;
 			pos += VByte.decode(text, pos, delta);
 			len = ByteStringUtil.strlen(text, pos);
+			String tmp1 = tempString.toString();
 			tempString.replace(delta.getValue().intValue(), text, pos, len);
+			String tmp2 = tempString.toString();
+			String tm = "";
 		}
-		return new CompactString(tempString).getDelayed();
+		CharSequence result = new CompactString(tempString).getDelayed();
+		return result;
 	}
 	
 //	private void dumpAll() {

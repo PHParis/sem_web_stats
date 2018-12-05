@@ -216,7 +216,8 @@ public abstract class BaseDictionary implements DictionaryPrivate {
 	public CharSequence idToString(int id, TripleComponentRole role) {
 		DictionarySectionPrivate section = getSection(id, role);
 		int localId = getLocalId(id, role);
-		return section.extract(localId);
+		CharSequence tmp = section.extract(localId);
+		return tmp;
 	}
 	
 }

@@ -122,7 +122,8 @@ public class SequenceLog64 implements DynamicSequence {
         int j=(int)(bitPos % W);
         long result;
         if (j+bitsField <= W) {
-        	result = (data[i] << (W-j-bitsField)) >>> (W-bitsField);
+        	long a = (data[i] << (W-j-bitsField));
+        	result = a >>> (W-bitsField);
         } else {
         	result = data[i] >>> j;
         	result = result | (data[i+1] << ( (W<<1) -j-bitsField)) >>> (W-bitsField);

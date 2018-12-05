@@ -173,8 +173,9 @@ public class Bitmap64 {
 		long word = words[wordIndex] & (~0L << fromIndex);
 
 		while (true) {
-			if (word != 0)
+			if (word != 0) {
 				return ((long)wordIndex * W) + Long.numberOfTrailingZeros(word);
+			}
 			if (++wordIndex == words.length)
 				return -1;
 			word = words[wordIndex];
