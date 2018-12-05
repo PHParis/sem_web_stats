@@ -6,3 +6,9 @@ hdt-fuseki/config-hdt.ttl
 .idea
 *.iml
 *.hdt
+**/.settings
+.vscode
+logs/
+.classpath
+.factorypath
+org.eclipse.jdt.core.prefs

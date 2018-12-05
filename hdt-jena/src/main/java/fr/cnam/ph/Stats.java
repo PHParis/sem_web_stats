@@ -87,6 +87,8 @@ public abstract class Stats {
 	}
 
 	void launch(String[] args) throws IOException {
+		// cd D:\dev\java\sem_web_stats && mvn clean compile && mvn clean install && cd hdt-java-package && mvn assembly:single && cd ..
+
 		// cd C:\GoogleDrive\dev\java\Stats_LOD_Wardrobe_HDT && mvn clean compile && mvn
 		// clean install && cd OU
 		// cd C:\google_drive\dev\java\Stats_LOD_Wardrobe_HDT && mvn clean compile && mvn

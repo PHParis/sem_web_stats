@@ -206,6 +206,7 @@ public class PartialResults {
 
 	public static void main(String[] args) throws IOException, NotFoundException {
 		// java -server -Xmx300g -Xms8g -Dfile.encoding=UTF-8 -Dlog4j.configurationFile=/data2/hamdif/doctorants/ph/wardrobe_java/log4j2.xml -cp "/data2/hamdif/doctorants/ph/wardrobe_java/hdt-java/lib/*" fr.cnam.ph.PartialResults fileName
+		// java -server -Xmx300g -Xms8g -Dfile.encoding=UTF-8 -Dlog4j.configurationFile=/data2/hamdif/doctorants/ph/wardrobe_java/log4j2.xml -cp "/data2/hamdif/doctorants/ph/wardrobe_java/hdt-java/lib/*" fr.cnam.ph.PartialResults /data2/hamdif/doctorants/ph/linkeddatasets/hdt/wikidata/wikidata-20170313-all-BETA.hdt "http://www.wikidata.org/entity/Q90 ? ?"
 		// fr.cnam.ph.Stats /data2/hamdif/doctorants/ph/wardrobe_java/conf.json
 //		long tmp = 0xFFFFFFFFL;
 		if (args == null || args.length <= 0) {
