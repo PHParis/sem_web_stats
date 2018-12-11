@@ -1,50 +1,47 @@
-[![Join the chat at https://gitter.im/rdfhdt](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rdfhdt)
+# LOD statistics
 
-# HDT Library, Java Implementation. http://www.rdfhdt.org
+All this work is based on the [HDT library](https://github.com/rdfhdt/hdt-java).
 
 ## Overview
 
-HDT-lib is a Java Library that implements the W3C Submission (http://www.w3.org/Submission/2011/03/) of the RDF HDT (Header-Dictionary-Triples) binary format for publishing and exchanging RDF data at large scale. Its compact representation allows storing RDF in fewer space, providing at the same time direct access to the stored information. This is achieved by depicting the RDF graph in terms of three main components: Header, Dictionary and Triples. The Header includes extensible metadata required to describe the RDF data set and details of its internals. The Dictionary organizes the vocabulary of strings present in the RDF graph by assigning numerical IDs to each different string. The Triples component comprises the internal structure of the RDF graph in a compressed form.
+Nowadays, there is a vast quantity of LD datasets available on the Web. Those datasets are often expressed in RDF allowing us to infer new data. Semantics contained in those datasets may help an automated agent to infer these new data. For example, a transitive property may lead to new assertions. But, in the wild, is semantics that much present? In other words, is the Linked Data semantics data, or is it data linked together with only a few semantics sprinkled on it? In this paper, we propose an in-depth and large-scale exploration of Linked Data datasets to understand how semantics is used. This study shows that there is a real lack of semantics. Hence, we suggest some ideas that help to improve semantics within Linked Data and to manage the existing situation.
 
-It provides several components:
-- hdt-java-api: Abstract interface for dealing with HDT files.
-- hdt-java-core: Core library for accessing HDT files programmatically from java. It allows creating HDT files from RDF and converting HDT files back to RDF. It also provides a Search interface to find triples that match a specific triple pattern.
-- hdt-java-cli: Commandline tools to convert RDF to HDT and access HDT files from a terminal.
-- hdt-jena: Jena integration. Provides a Jena Graph implementation that allows accessing HDT files as normal Jena Models. In turn, this can be used with Jena ARQ to provide more advanced searches, such as SPARQL, and even setting up SPARQL Endpoints with Fuseki.
-- hdt-java-package: Generates a package with all the components and launcher scripts.
-- hdt-fuseki: Packages Apache Jena Fuseki with the HDT jars and a fast launcher, to start a SPARQL endpoint out of HDT files very easily.
+This tool aims at computing statistics about Linked Data datasets.
 
+## Installation and configuration
 
-## Compiling
+To compile/install you can use the following commands: `mvn clean compile` and `mvn clean install`. 
 
-Use `mvn install` to let Apache Maven install the required jars in your system.
+Under `hdt-java-package` directory, you can run the `mvn assembly:single` command to generate a distribution directory with all the jars and launcher scripts.
 
-You can also run `mvn assembly:single` under hdt-java-package to generate a distribution directory with all the jars and launcher scripts.
+To launch the application, you can run the following class with the specified JSON configuration file: `fr.cnam.ph.Stats conf.json`
 
+The configuration file `conf.json`:
 
-## Usage
+```json
+{
+    "hdtDirectory": "path/to/where/hdt/files/will/be/downloaded",
+    "jsonDirectory": "output/path",
+    "datasetNamesFilePath": "file/containing/dataset_names",
+    "ontologiesPath": "file/containing/ontologies.nt",
+    "visitedUrisPath": "file/containing/visited/uris/of/ontologies",
+    "datasetErrorsPath": "file/containing/dataset/with/errors/while/processing",
+    "datasetNamesLimit": 0,
+    "loadOntologies": true,
+    "forceRecomputation": false,
+    "forceHDTDownload": false,
+    "passPreviousDatasetInError": true
+}
+```
 
-Please refer to hdt-java-package/README for more information on how to use the library. You can also find useful information on our Web Page http://www.rdfhdt.org
-
-
-## License
-
-Each module has a different License. Core is LGPL, examples and tools are Apache.
-
-* `hdt-api`: Apache License
-* `hdt-java-cli`: (Commandline tools and examples): Apache License
-* `hdt-java-core`: Lesser General Public License
-* `hdt-jena`: Lesser General Public License
-* `hdt-fuseki`: Apache License
-
-
-## Authors
-
-* Mario Arias <mario.arias@gmailcom>
-* Javier D. Fernandez <jfergar@infor.uva.es>
-* Miguel A. Martinez-Prieto <migumar2@infor.uva.es>
-
-
-## Acknowledgements
-
-RDF/HDT is a project developed by the Insight Centre for Data Analytics (www.insight-centre.org), University of Valladolid (www.uva.es), University of Chile (www.uchile.cl). Funded by Science Foundation Ireland: Grant No. SFI/08/CE/I1380, Lion-II; the Spanish Ministry of Economy and Competitiveness (TIN2009-14009-C02-02); and Chilean Fondecyt's 1110287 and 1-110066.
+* `hdtDirectory`: the directory where HDT files will be downloaded
+* `jsonDirectory`: (outpu) the directory where JSON files containing statistics will be saved
+* `datasetNamesFilePath`: The file `dataset_names` is a file containing all LOD Laundromat's datasets URIs.
+* `ontologiesPath`: file containing all ontologies crawled so far, to speed up computation and avoid repeated URI dereferencing.
+* `visitedUrisPath`: to speed up computation and avoid repeated URI dereferencing, we keep track of URIs we already tried to resolve in this file
+* `datasetErrorsPath`: file containing datasets IDs we failed to process
+* `datasetNamesLimit`: number of datasets to process. 0 is the default and means no limit
+* `loadOntologies`: boolean to know if we load ontologies we already retrieved
+* `forceRecomputation`: if true, then we compute again the stats about datasets having already processed
+* `forceHDTDownload`: if true, then we download again the HDT file, even if it is already existing
+* `passPreviousDatasetInError`: if true, datasets in error (see `datasetErrorsPath`) will be ignore. Useful when launching multiple times the tool in case of problem
