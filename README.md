@@ -124,23 +124,7 @@ Analysis of types of properties:
 | IrreflexiveProperty       | 21            | 1.66                     | 1.65                      | 1.65                        |
 | ReflexiveProperty         | 16            | 1.32                     | 1.32                      | 1.32                        |
 
-Definition (**Property and class usage**):
-Let \\(C\\) be an OWL class (resp. $$p$$ an OWL property).
-Let \(\Omega=\lbrace KB_i|i\in[1,N]\rbrace\) be a set of datasets of cardinality \(N\).
-
-The **class usage** (resp. the **property usage**) of a class \(C\) (resp. property \(p\)), noted \(CU*{\Omega}(C)\) (resp. \(PU*{\Omega}(p)\)), is the weighted mean of the number of subjects having \(C\) as an RDF type (resp. using \(p\) as a predicate).
-The weights are the inverse of the total number of subjects in the dataset.
-
-    \(CU_{\Omega}(C)=\frac{\sum_{i=1}^{N}|Sub(KB_i, C)|\times \frac{1}{|Sub(KB_i)|}}{\sum_{i=1}^{N}\frac{1}{|Sub(KB_i)|}}\)
-
-\begin{equation}
-PU*{\Omega}(p)=\frac{\sum*{i=1}^{N}|Sub(KB*i, p)|\times \frac{1}{|Sub(KB_i)|}}{\sum*{i=1}^{N}\frac{1}{|Sub(KB_i)|}}
-\end{equation}
-where \(Sub(KB_i, C)\) gives all distinct subjects of type \(C\) in \(KB_i\),
-\(Sub(KB_i, p)\) gives all distinct subjects having the property \(p\) in \(KB_i\)
-and \(Sub(KB_i)\) gives all distinct subjects in \(KB_i\).
-
-This definition prevents large datasets to push the mean to a large amount.
+![alt text](https://github.com/PHParis/sem_web_stats/raw/master/src/common/def.png "definition")
 
 Analysis of OWL classes (see previous definition}):
 
