@@ -124,7 +124,7 @@ Analysis of types of properties:
 | IrreflexiveProperty       | 21            | 1.66                     | 1.65                      | 1.65                        |
 | ReflexiveProperty         | 16            | 1.32                     | 1.32                      | 1.32                        |
 
-<!-- Definition (**Property and class usage**):
+Definition (**Property and class usage**):
 Let \\(C\\) be an OWL class (resp. $$p$$ an OWL property).
 Let \(\Omega=\lbrace KB_i|i\in[1,N]\rbrace\) be a set of datasets of cardinality \(N\).
 
@@ -140,7 +140,7 @@ where \(Sub(KB_i, C)\) gives all distinct subjects of type \(C\) in \(KB_i\),
 \(Sub(KB_i, p)\) gives all distinct subjects having the property \(p\) in \(KB_i\)
 and \(Sub(KB_i)\) gives all distinct subjects in \(KB_i\).
 
-This definition prevents large datasets to push the mean to a large amount. -->
+This definition prevents large datasets to push the mean to a large amount.
 
 Analysis of OWL classes (see previous definition}):
 
