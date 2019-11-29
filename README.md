@@ -124,7 +124,7 @@ Analysis of types of properties:
 | IrreflexiveProperty       | 21            | 1.66                     | 1.65                      | 1.65                        |
 | ReflexiveProperty         | 16            | 1.32                     | 1.32                      | 1.32                        |
 
-![alt text](https://github.com/PHParis/sem_web_stats/raw/master/src/common/def.png "definition")
+![alt text](https://github.com/PHParis/sem_web_stats/raw/master/def.png "definition")
 
 Analysis of OWL classes (see previous definition}):
 
