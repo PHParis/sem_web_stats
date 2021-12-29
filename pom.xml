@@ -105,7 +105,7 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-compress</artifactId>
-        <version>1.16.1</version>
+        <version>1.18</version>
       </dependency>
       <dependency>
         <groupId>org.apache.jena</groupId>
@@ -139,12 +139,12 @@
       <dependency>
         <groupId>org.apache.jena</groupId>
         <artifactId>jena-core</artifactId>
-        <version>${jena.version}</version>
+        <version>4.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.jena</groupId>
         <artifactId>jena-core</artifactId>
-        <version>${jena.version}</version>
+        <version>4.2.0</version>
         <classifier>tests</classifier>
         <scope>test</scope>
       </dependency>
@@ -171,7 +171,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.12</version>
+        <version>4.13.1</version>
         <scope>test</scope>
       </dependency>
       <dependency>
